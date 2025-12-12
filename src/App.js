@@ -4,6 +4,7 @@ import './App.css';
 function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,10 +30,23 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Prevent body scroll when menu is open
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false); // Close menu on mobile after clicking
     }
   };
 
@@ -44,7 +58,11 @@ function App() {
           <div className="nav-logo">
             <i className="fas fa-user-md"></i> OT
           </div>
-          <ul className="nav-menu">
+          <button className="mobile-menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">
+            <i className={isMenuOpen ? 'fas fa-times' : 'fas fa-bars'}></i>
+          </button>
+          {isMenuOpen && <div className="menu-backdrop" onClick={() => setIsMenuOpen(false)}></div>}
+          <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
             <li><a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className={activeSection === 'home' ? 'active' : ''}>Home</a></li>
             <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className={activeSection === 'about' ? 'active' : ''}>About</a></li>
             <li><a href="#education" onClick={(e) => { e.preventDefault(); scrollToSection('education'); }} className={activeSection === 'education' ? 'active' : ''}>Education</a></li>
@@ -84,8 +102,43 @@ function App() {
             </div>
           </div>
           <div className="hero-image">
-            <div className="image-placeholder">
-              <i className="fas fa-user-md"></i>
+            <div className="profile-image-container">
+              <img 
+                src={process.env.PUBLIC_URL + '/profile-photo.jpg'} 
+                alt="OM TANDON - PharmD Student"
+                className="profile-photo"
+                onError={(e) => {
+                  // Try alternative image formats
+                  const img = e.target;
+                  const formats = ['/profile-photo.png', '/profile-photo.jpeg', '/profile-photo.webp'];
+                  const currentSrc = img.src;
+                  const basePath = process.env.PUBLIC_URL || '';
+                  
+                  // Check if we've tried all formats
+                  const triedFormat = formats.find(f => currentSrc.includes(f));
+                  if (triedFormat) {
+                    const nextIndex = formats.indexOf(triedFormat) + 1;
+                    if (nextIndex < formats.length) {
+                      img.src = basePath + formats[nextIndex];
+                      return;
+                    }
+                  } else if (!currentSrc.includes('/profile-photo')) {
+                    // First error, try png
+                    img.src = basePath + '/profile-photo.png';
+                    return;
+                  }
+                  
+                  // All formats failed, show placeholder
+                  img.style.display = 'none';
+                  const placeholder = img.nextElementSibling;
+                  if (placeholder) {
+                    placeholder.style.display = 'flex';
+                  }
+                }}
+              />
+              <div className="image-placeholder" style={{display: 'none'}}>
+                <i className="fas fa-user-md"></i>
+              </div>
             </div>
           </div>
         </div>

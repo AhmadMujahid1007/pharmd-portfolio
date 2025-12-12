@@ -1,3 +1,20 @@
+# OM TANDON - PharmD Portfolio
+
+A modern, responsive portfolio website for PharmD student showcasing education, experience, certifications, and projects.
+
+## Adding Your Profile Photo
+
+To add your profile photo:
+1. Place your photo in the `public` folder
+2. Name it one of the following:
+   - `profile-photo.jpg`
+   - `profile-photo.png`
+   - `profile-photo.jpeg`
+   - `profile-photo.webp`
+3. Recommended size: 300x300 pixels or larger (square format works best)
+4. The image will automatically display in the hero section
+5. If no image is found, a placeholder icon will be shown
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
