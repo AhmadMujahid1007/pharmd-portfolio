@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmD Student Resume</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .resume {
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #2c5aa0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2c5aa0;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        .contact-info i {
+            margin-right: 5px;
+            color: #2c5aa0;
+        }
+        .section-title i {
+            margin-right: 10px;
+            color: #2c5aa0;
+        }
+        .item-title i {
+            margin-right: 8px;
+            color: #2c5aa0;
+            font-size: 14px;
+        }
+        .item-location i {
+            margin-right: 5px;
+            color: #999;
+        }
+        .item-date i {
+            margin-right: 5px;
+            color: #666;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            color: #2c5aa0;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 2px solid #2c5aa0;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .education-item, .experience-item, .certification-item {
+            margin-bottom: 20px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .item-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        .item-date {
+            color: #666;
+            font-size: 14px;
+        }
+        .item-location {
+            color: #666;
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+        .item-description {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        .item-description ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+        .item-description li {
+            margin-bottom: 5px;
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .skill-tag {
+            background-color: #e8f0fe;
+            color: #2c5aa0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .resume {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="resume">
+        <div class="header">
+            <h1>YOUR NAME</h1>
+            <div class="contact-info">
+                <span><i class="fas fa-envelope"></i> email@example.com</span>
+                <span><i class="fas fa-phone"></i> (555) 123-4567</span>
+                <span><i class="fas fa-map-marker-alt"></i> City, State ZIP</span>
+                <span><i class="fab fa-linkedin"></i> linkedin.com/in/yourprofile</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="fas fa-graduation-cap"></i>EDUCATION</div>
+            <div class="education-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title"><i class="fas fa-university"></i>Doctor of Pharmacy (PharmD)</div>
+                        <div class="item-location"><i class="fas fa-map-pin"></i>University Name, City, State</div>
+                    </div>
+                    <div class="item-date"><i class="far fa-calendar"></i>Expected: Month Year</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>GPA: 3.X/4.0 (or Dean's List, Honors, etc.)</li>
+                        <li>Relevant Coursework: Pharmacology, Medicinal Chemistry, Pharmacotherapy, Pharmacy Law, Clinical Pharmacy, Therapeutics</li>
+                        <li>Student Organizations: American Pharmacists Association (APhA), Student National Pharmaceutical Association (SNPhA)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="fas fa-briefcase"></i>PHARMACY EXPERIENCE</div>
+            
+            <div class="experience-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title"><i class="fas fa-pills"></i>Pharmacy Intern / Technician</div>
+                        <div class="item-location"><i class="fas fa-map-pin"></i>Pharmacy Name, City, State</div>
+                    </div>
+                    <div class="item-date"><i class="far fa-calendar"></i>Month Year - Present</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>Assist pharmacists in dispensing medications and providing patient counseling</li>
+                        <li>Process prescriptions, verify insurance coverage, and manage inventory</li>
+                        <li>Maintain patient profiles and ensure compliance with pharmacy regulations</li>
+                        <li>Collaborate with healthcare providers to optimize medication therapy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title"><i class="fas fa-heart"></i>Pharmacy Student Volunteer</div>
+                        <div class="item-location"><i class="fas fa-map-pin"></i>Community Health Center, City, State</div>
+                    </div>
+                    <div class="item-date"><i class="far fa-calendar"></i>Month Year - Month Year</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>Participated in health screenings and medication therapy management</li>
+                        <li>Educated patients on medication adherence and disease state management</li>
+                        <li>Assisted in medication reconciliation and drug information services</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="fas fa-stethoscope"></i>CLINICAL ROTATIONS</div>
+            
+            <div class="experience-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title"><i class="fas fa-hospital"></i>Advanced Pharmacy Practice Experience (APPE)</div>
+                        <div class="item-location"><i class="fas fa-map-pin"></i>Hospital/Clinic Name, City, State</div>
+                    </div>
+                    <div class="item-date"><i class="far fa-calendar"></i>Month Year - Month Year</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>Completed rotations in: Ambulatory Care, Internal Medicine, Community Pharmacy, Hospital Pharmacy</li>
+                        <li>Participated in patient care rounds and medication therapy management</li>
+                        <li>Conducted drug information research and presented findings to healthcare team</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="fas fa-certificate"></i>CERTIFICATIONS & LICENSES</div>
+            <div class="certification-item">
+                <div class="item-description">
+                    <ul>
+                        <li>Pharmacy Technician License (State) - License #: XXXXX</li>
+                        <li>CPR/BLS Certified - American Heart Association</li>
+                        <li>Immunization Certification (if applicable)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="fas fa-tools"></i>SKILLS</div>
+            <div class="skills">
+                <span class="skill-tag">Medication Dispensing</span>
+                <span class="skill-tag">Patient Counseling</span>
+                <span class="skill-tag">Pharmacy Software Systems</span>
+                <span class="skill-tag">Drug Information</span>
+                <span class="skill-tag">Medication Therapy Management</span>
+                <span class="skill-tag">Clinical Research</span>
+                <span class="skill-tag">Interprofessional Collaboration</span>
+                <span class="skill-tag">Pharmaceutical Calculations</span>
+                <span class="skill-tag">Inventory Management</span>
+                <span class="skill-tag">Microsoft Office</span>
+                <span class="skill-tag">Electronic Health Records</span>
+                <span class="skill-tag">Pharmacy Law & Regulations</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="fas fa-flask"></i>PROJECTS & RESEARCH</div>
+            <div class="experience-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title"><i class="fas fa-microscope"></i>Research Project / Capstone Project</div>
+                        <div class="item-location"><i class="fas fa-map-pin"></i>University Name</div>
+                    </div>
+                    <div class="item-date"><i class="far fa-calendar"></i>Month Year - Month Year</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>Conducted research on [topic] under the supervision of Dr. [Name]</li>
+                        <li>Presented findings at [conference/event]</li>
+                        <li>Collaborated with interdisciplinary team to analyze data and develop recommendations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="fas fa-users"></i>LEADERSHIP & ACTIVITIES</div>
+            <div class="item-description">
+                <ul>
+                    <li><strong>Member/Leader</strong>, American Pharmacists Association (APhA) - University Chapter</li>
+                    <li><strong>Volunteer</strong>, Health Fairs and Community Outreach Programs</li>
+                    <li><strong>Participant</strong>, Pharmacy Student Competitions</li>
+                    <li><strong>Tutor/Mentor</strong>, Pharmacy Students (if applicable)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title"><i class="fas fa-user-check"></i>REFERENCES</div>
+            <div class="item-description">
+                <p>Available upon request</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
