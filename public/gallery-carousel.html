@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Carousel - OM TANDON</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .gallery-carousel-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carousel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .carousel-close-btn {
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .carousel-close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .carousel-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .carousel-counter {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .carousel-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+            min-height: 60vh;
+        }
+
+        .carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-prev {
+            left: 2rem;
+        }
+
+        .carousel-next {
+            right: 2rem;
+        }
+
+        .carousel-image-container {
+            max-width: 90%;
+            max-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .carousel-main-image {
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .carousel-image-info {
+            text-align: center;
+        }
+
+        .carousel-image-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .carousel-image-info p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .carousel-bottom-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .carousel-bottom-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: white;
+        }
+
+        .carousel-thumbnails {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+
+        .carousel-thumbnail {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+        }
+
+        .carousel-thumbnail:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .carousel-thumbnail.active {
+            opacity: 1;
+            border-color: #2c5aa0;
+            box-shadow: 0 0 20px rgba(44, 90, 160, 0.5);
+        }
+
+        .carousel-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-thumbnail:hover .thumbnail-overlay {
+            opacity: 1;
+        }
+
+        .thumbnail-overlay span {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .no-images-message {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .no-images-message i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-header {
+                padding: 1rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .carousel-title {
+                font-size: 1.2rem;
+            }
+
+            .carousel-nav-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .carousel-prev {
+                left: 1rem;
+            }
+
+            .carousel-next {
+                right: 1rem;
+            }
+
+            .carousel-main {
+                padding: 1rem;
+                min-height: 50vh;
+            }
+
+            .carousel-main-image {
+                max-height: 50vh;
+            }
+
+            .carousel-thumbnails {
+                gap: 0.5rem;
+            }
+
+            .carousel-thumbnail {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-carousel-page">
+        <div class="carousel-header">
+            <a href="/" class="carousel-close-btn">
+                <i class="fas fa-times"></i> Close
+            </a>
+            <h2 class="carousel-title">Gallery View</h2>
+            <div class="carousel-counter" id="carouselCounter">1 / 1</div>
+        </div>
+        
+        <div class="carousel-main" id="carouselMain">
+            <button class="carousel-nav-btn carousel-prev" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="carousel-image-container" id="imageContainer">
+                <div class="no-images-message">
+                    <i class="fas fa-images"></i>
+                    <p>No images found. Please add images from the main gallery page.</p>
+                </div>
+            </div>
+            
+            <button class="carousel-nav-btn carousel-next" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="carousel-bottom-section">
+            <h3 class="carousel-bottom-title">All Images</h3>
+            <div class="carousel-thumbnails" id="thumbnailsContainer">
+                <!-- Thumbnails will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let galleryImages = [];
+        let currentIndex = 0;
+
+        // Load images from localStorage
+        function loadImages() {
+            const saved = localStorage.getItem('galleryImages');
+            if (saved) {
+                galleryImages = JSON.parse(saved);
+            } else {
+            // Default images if none found
+            galleryImages = [
+                { 
+                    id: 1, 
+                    url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=600&fit=crop', 
+                    title: 'Pharmacy Laboratory' 
+                },
+                { 
+                    id: 2, 
+                    url: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=800&h=600&fit=crop', 
+                    title: 'Medical Research' 
+                },
+                { 
+                    id: 3, 
+                    url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop', 
+                    title: 'Pharmaceutical Studies' 
+                },
+                { 
+                    id: 4, 
+                    url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=600&fit=crop', 
+                    title: 'Healthcare Education' 
+                },
+                { 
+                    id: 5, 
+                    url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop', 
+                    title: 'University Campus' 
+                },
+                { 
+                    id: 6, 
+                    url: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=800&h=600&fit=crop', 
+                    title: 'Pharmacy Practice' 
+                },
+                { 
+                    id: 7, 
+                    url: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?w=800&h=600&fit=crop', 
+                    title: 'Medical Books & Study' 
+                },
+                { 
+                    id: 8, 
+                    url: 'https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&h=600&fit=crop', 
+                    title: 'Pharmaceutical Care' 
+                }
+            ];
+            }
+
+            // Get index from URL parameter if present
+            const urlParams = new URLSearchParams(window.location.search);
+            const indexParam = urlParams.get('index');
+            if (indexParam) {
+                currentIndex = parseInt(indexParam) || 0;
+                if (currentIndex >= galleryImages.length) {
+                    currentIndex = 0;
+                }
+            }
+
+            renderCarousel();
+            renderThumbnails();
+        }
+
+        function renderCarousel() {
+            const imageContainer = document.getElementById('imageContainer');
+            const counter = document.getElementById('carouselCounter');
+            
+            if (galleryImages.length === 0) {
+                imageContainer.innerHTML = `
+                    <div class="no-images-message">
+                        <i class="fas fa-images"></i>
+                        <p>No images found. Please add images from the main gallery page.</p>
+                    </div>
+                `;
+                counter.textContent = '0 / 0';
+                return;
+            }
+
+            const currentImage = galleryImages[currentIndex];
+            imageContainer.innerHTML = `
+                <img 
+                    src="${currentImage.url}" 
+                    alt="${currentImage.title}"
+                    class="carousel-main-image"
+                />
+                <div class="carousel-image-info">
+                    <h3>${currentImage.title}</h3>
+                    <p>Image ${currentIndex + 1} of ${galleryImages.length}</p>
+                </div>
+            `;
+            
+            counter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
+            updateThumbnailActive();
+        }
+
+        function renderThumbnails() {
+            const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+            
+            if (galleryImages.length === 0) {
+                thumbnailsContainer.innerHTML = '';
+                return;
+            }
+
+            thumbnailsContainer.innerHTML = galleryImages.map((image, index) => `
+                <div 
+                    class="carousel-thumbnail ${index === currentIndex ? 'active' : ''}"
+                    onclick="goToImage(${index})"
+                >
+                    <img src="${image.url}" alt="${image.title}" />
+                    <div class="thumbnail-overlay">
+                        <span>${index + 1}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateThumbnailActive() {
+            const thumbnails = document.querySelectorAll('.carousel-thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                if (index === currentIndex) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+        }
+
+        function goToImage(index) {
+            currentIndex = index;
+            renderCarousel();
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % galleryImages.length;
+            renderCarousel();
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+            renderCarousel();
+        }
+
+        // Event listeners
+        document.getElementById('nextBtn').addEventListener('click', nextImage);
+        document.getElementById('prevBtn').addEventListener('click', prevImage);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevImage();
+            } else if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'Escape') {
+                window.location.href = '/';
+            }
+        });
+
+        // Make goToImage available globally
+        window.goToImage = goToImage;
+
+        // Load images on page load
+        loadImages();
+    </script>
+</body>
+</html>
+
