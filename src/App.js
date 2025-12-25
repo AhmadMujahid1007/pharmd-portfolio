@@ -499,41 +499,22 @@ function App() {
       
       // Verify password
       if (loginCredentials.password === user.password) {
-        if (user.emailVerified) {
-          // Already verified, login
-          console.log('[LOGIN] User data:', user);
-          console.log('[LOGIN] user.isAdmin:', user.isAdmin);
-          console.log('[LOGIN] Setting isAdmin to:', user.isAdmin || false);
-          setCurrentUser(user);
-          setIsLoggedIn(true);
-          setIsAdmin(user.isAdmin || false);
-          console.log('[LOGIN] After setIsAdmin, checking state...');
-          localStorage.setItem('userSession', JSON.stringify({ email: user.email }));
-          setShowLoginModal(false);
-          setLoginCredentials({ usernameOrEmail: '', password: '' });
-          alert('Login successful!');
-        } else {
-          // Not verified, show verification modal
-          setUserEmail(user.email);
-          
-          // Get or generate verification code
-          let code = user.verificationCode || generateVerificationCode();
-          setGeneratedCode(code);
-          
-          // Update code in Firebase if it wasn't there
-          if (!user.verificationCode) {
-            await updateUser(user.id, { verificationCode: code });
-          } else {
-            // Code exists in Firebase, use it
-            code = user.verificationCode;
-          }
-          
-          sendVerificationEmail(user.email, code);
-          setShowLoginModal(false);
-          setShowEmailVerificationModal(true);
-          setResendTimer(RESEND_DELAY);
-          setLoginCredentials({ usernameOrEmail: '', password: '' });
-        }
+        // Always require email verification on every login
+        setUserEmail(user.email);
+        
+        // Generate new verification code for every login
+        const code = generateVerificationCode();
+        setGeneratedCode(code);
+        
+        // Update code in Firebase
+        await updateUser(user.id, { verificationCode: code });
+        
+        // Send verification email
+        sendVerificationEmail(user.email, code);
+        setShowLoginModal(false);
+        setShowEmailVerificationModal(true);
+        setResendTimer(RESEND_DELAY);
+        setLoginCredentials({ usernameOrEmail: '', password: '' });
       } else {
         alert('Invalid credentials');
       }
