@@ -475,8 +475,13 @@ function App() {
         return;
       }
     } catch (error) {
-      // Cloud Function not deployed, try EmailJS
-      console.log('Cloud Function not available, trying EmailJS...');
+      // Check if it's a CORS error
+      if (error.message && error.message.includes('CORS')) {
+        console.warn('CORS error with Cloud Function. Falling back to EmailJS...');
+        console.warn('To fix CORS, see FIX_CORS.md or use EmailJS instead.');
+      } else {
+        console.log('Cloud Function not available or error occurred, trying EmailJS...');
+      }
     }
     
     // Fallback: Use EmailJS (requires setup - see EMAIL_SETUP.md)

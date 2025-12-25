@@ -47,8 +47,16 @@ const transporter = nodemailer.createTransport({
 // const sgMail = require('@sendgrid/mail');
 // sgMail.setApiKey('your-sendgrid-api-key');
 
+// IMPORTANT: Use onCall (not onRequest) to avoid CORS issues
+// onCall automatically handles CORS for Firebase SDK calls
 exports.sendVerificationEmail = functions.https.onCall(async (data, context) => {
   const { email, code } = data;
+  
+  // Optional: Add origin validation for security
+  // const allowedOrigins = ['https://black-rock-0b1957e1e.2.azurestaticapps.net', 'http://localhost:3000'];
+  // if (context.rawRequest && !allowedOrigins.includes(context.rawRequest.headers.origin)) {
+  //   throw new functions.https.HttpsError('permission-denied', 'Origin not allowed');
+  // }
   
   const mailOptions = {
     from: 'your-email@gmail.com',
