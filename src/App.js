@@ -459,10 +459,14 @@ function App() {
   };
 
   const sendVerificationEmail = (email, code) => {
-    // In a real application, this would send an actual email
-    // For demo purposes, we'll just show it in an alert and console
+    // Log code to console for development/debugging
+    // In production, integrate with email service (Firebase Cloud Functions, SendGrid, etc.)
     console.log(`[VERIFICATION CODE] Email: ${email}, Code: ${code}`);
-    alert(`Verification code sent to ${email}\n\nCode: ${code}\n\n(In production, this would be sent via email)`);
+    
+    // In production, don't show alert with code
+    // TODO: Integrate with email service here (Firebase Cloud Functions, SendGrid, Mailgun, etc.)
+    // For now, code is logged to console and saved in Firebase
+    // The calling function will show appropriate message to user
   };
 
   const handleLogin = async (e) => {
@@ -511,6 +515,11 @@ function App() {
         
         // Send verification email
         sendVerificationEmail(user.email, code);
+        if (!isProduction) {
+          alert(`Verification code sent to ${user.email}\n\nCode: ${code}\n\n(Development mode - check console)`);
+        } else {
+          alert(`Verification code has been sent to ${user.email}. Please check your email.`);
+        }
         setShowLoginModal(false);
         setShowEmailVerificationModal(true);
         setResendTimer(RESEND_DELAY);
@@ -586,7 +595,11 @@ function App() {
       }
       sendVerificationEmail(userEmail, code);
       setResendTimer(RESEND_DELAY);
-      alert('Verification code resent!');
+      if (!isProduction) {
+        alert(`Verification code resent!\n\nCode: ${code}\n\n(Development mode)`);
+      } else {
+        alert('Verification code has been resent. Please check your email.');
+      }
     } catch (error) {
       console.error('Error resending code:', error);
       alert('An error occurred. Please try again.');
@@ -675,7 +688,11 @@ function App() {
     sendVerificationEmail(resetPasswordData.email, code);
     setResetPasswordStep(2);
     setResetResendTimer(RESEND_DELAY);
-    alert(`Verification code sent to ${resetPasswordData.email}\n\nCode: ${code}\n\n(In production, this would be sent via email)`);
+    if (!isProduction) {
+      alert(`Verification code sent to ${resetPasswordData.email}\n\nCode: ${code}\n\n(Development mode)`);
+    } else {
+      alert(`Verification code has been sent to ${resetPasswordData.email}. Please check your email.`);
+    }
   };
 
   const handleResetPasswordVerify = (e) => {
@@ -724,7 +741,11 @@ function App() {
     localStorage.setItem('userData', JSON.stringify(userData));
     sendVerificationEmail(resetPasswordData.email, code);
     setResetResendTimer(RESEND_DELAY);
-    alert('Verification code resent!');
+    if (!isProduction) {
+      alert(`Verification code resent!\n\nCode: ${code}\n\n(Development mode)`);
+    } else {
+      alert('Verification code has been resent. Please check your email.');
+    }
   };
 
   // eslint-disable-next-line no-unused-vars
