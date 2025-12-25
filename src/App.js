@@ -552,27 +552,18 @@ function App() {
       
       // Verify password
       if (loginCredentials.password === user.password) {
-        // Always require email verification on every login
-        setUserEmail(user.email);
+        // Login user directly without email verification
+        console.log('[LOGIN] User logged in:', user);
+        setCurrentUser(user);
+        setIsLoggedIn(true);
+        setIsAdmin(user.isAdmin || false);
         
-        // Generate new verification code for every login
-        const code = generateVerificationCode();
-        setGeneratedCode(code);
+        // Save session
+        localStorage.setItem('userSession', JSON.stringify({ email: user.email }));
         
-        // Update code in Firebase
-        await updateUser(user.id, { verificationCode: code });
-        
-        // Send verification email
-        sendVerificationEmail(user.email, code);
-        if (!isProduction) {
-          alert(`Verification code sent to ${user.email}\n\nCode: ${code}\n\n(Development mode - check console)`);
-        } else {
-          alert(`Verification code has been sent to ${user.email}. Please check your email.`);
-        }
         setShowLoginModal(false);
-        setShowEmailVerificationModal(true);
-        setResendTimer(RESEND_DELAY);
         setLoginCredentials({ usernameOrEmail: '', password: '' });
+        alert('Login successful!');
       } else {
         alert('Invalid credentials');
       }
