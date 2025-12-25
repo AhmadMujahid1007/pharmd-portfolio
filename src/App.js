@@ -29,6 +29,7 @@ function App() {
   const [newUserForm, setNewUserForm] = useState({ username: '', email: '', password: '', isAdmin: false });
   const [validationErrors, setValidationErrors] = useState({ username: '', email: '' });
   const [validating, setValidating] = useState({ username: false, email: false });
+  const [showLoginButton, setShowLoginButton] = useState(false);
   const [galleryImages, setGalleryImages] = useState(() => {
     const saved = localStorage.getItem('galleryImages');
     return saved ? JSON.parse(saved) : [
@@ -265,6 +266,35 @@ function App() {
     }
   }, [editableContent, profileName, profileImageUrl, galleryImages]);
 
+  // Check if URL contains login parameter to show/hide login button
+  // Uses query parameters (?login=true) or hash (#login) for Azure compatibility
+  useEffect(() => {
+    const checkUrl = () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const hash = window.location.hash.toLowerCase();
+      
+      // Check for query parameter: ?login=true or ?auth=true or ?page=login
+      const hasLoginQuery = searchParams.get('login') === 'true' || 
+                           searchParams.get('auth') === 'true' ||
+                           searchParams.get('page') === 'login' ||
+                           searchParams.get('page') === 'Login';
+      
+      // Check for hash: #login
+      const hasLoginHash = hash === '#login' || hash.includes('#login');
+      
+      setShowLoginButton(hasLoginQuery || hasLoginHash);
+    };
+    
+    checkUrl();
+    // Check URL on hash change (for SPA navigation)
+    window.addEventListener('hashchange', checkUrl);
+    window.addEventListener('popstate', checkUrl);
+    
+    return () => {
+      window.removeEventListener('hashchange', checkUrl);
+      window.removeEventListener('popstate', checkUrl);
+    };
+  }, []);
 
   // Load data from Firebase on component mount
   useEffect(() => {
@@ -1710,9 +1740,11 @@ function App() {
                   </button>
                 </div>
               ) : (
-                <button className="nav-login-btn" onClick={() => setShowLoginModal(true)}>
-                  <i className="fas fa-sign-in-alt"></i> Login
-                </button>
+                showLoginButton && (
+                  <button className="nav-login-btn" onClick={() => setShowLoginModal(true)}>
+                    <i className="fas fa-sign-in-alt"></i> Login
+                  </button>
+                )
               )}
             </li>
           </ul>
