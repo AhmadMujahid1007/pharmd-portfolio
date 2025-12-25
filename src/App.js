@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { savePortfolioData, loadPortfolioData, saveUser, getUserByEmail, getUserByUsername, getAllUsers, deleteUser, updateUser } from './firebaseService';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
 import emailjs from '@emailjs/browser';
 
