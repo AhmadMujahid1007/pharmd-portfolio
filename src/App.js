@@ -253,9 +253,11 @@ function App() {
     // Start with default content, will be updated from Firebase/localStorage
     return getDefaultContent();
   });
+  // eslint-disable-next-line no-unused-vars
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   // Helper function to save all data to Firebase
+  // eslint-disable-next-line no-unused-vars
   const saveAllDataToFirebase = useCallback(async () => {
     try {
       await savePortfolioData({ editableContent, profileName, profileImageUrl, galleryImages });
@@ -744,6 +746,7 @@ function App() {
     alert('Verification code resent!');
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleImageUpload = (e, imageId) => {
     const file = e.target.files[0];
     if (file) {
