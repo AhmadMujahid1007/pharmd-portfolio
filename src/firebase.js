@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getFunctions } from 'firebase/functions';
 
 // Your web app's Firebase configuration
 // TODO: Replace with your Firebase config
@@ -19,6 +20,9 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore
 export const db = getFirestore(app);
+
+// Initialize Functions
+export const functions = getFunctions(app);
 
 export default app;
 

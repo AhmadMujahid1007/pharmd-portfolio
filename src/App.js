@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { savePortfolioData, loadPortfolioData, saveUser, getUserByEmail, getUserByUsername, getAllUsers, deleteUser, updateUser } from './firebaseService';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { functions } from './firebase';
+import emailjs from '@emailjs/browser';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -458,15 +461,56 @@ function App() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };
 
-  const sendVerificationEmail = (email, code) => {
+  const sendVerificationEmail = async (email, code) => {
     // Log code to console for development/debugging
-    // In production, integrate with email service (Firebase Cloud Functions, SendGrid, etc.)
     console.log(`[VERIFICATION CODE] Email: ${email}, Code: ${code}`);
     
-    // In production, don't show alert with code
-    // TODO: Integrate with email service here (Firebase Cloud Functions, SendGrid, Mailgun, etc.)
-    // For now, code is logged to console and saved in Firebase
-    // The calling function will show appropriate message to user
+    // Try Firebase Cloud Function first (if deployed)
+    try {
+      const sendEmail = httpsCallable(functions, 'sendVerificationEmail');
+      const result = await sendEmail({ email, code });
+      
+      if (result.data && result.data.success) {
+        console.log('Email sent successfully via Cloud Function');
+        return;
+      }
+    } catch (error) {
+      // Cloud Function not deployed, try EmailJS
+      console.log('Cloud Function not available, trying EmailJS...');
+    }
+    
+    // Fallback: Use EmailJS (requires setup - see EMAIL_SETUP.md)
+    // To use EmailJS, you need to:
+    // 1. Sign up at https://www.emailjs.com/ (free tier available)
+    // 2. Create email service (Gmail/Outlook) and template
+    // 3. Get Service ID, Template ID, and Public Key
+    // 4. Add environment variables or update values below
+    
+    const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID || '';
+    const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || '';
+    const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || '';
+    
+    if (EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY) {
+      try {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_email: email,
+          verification_code: code,
+          message: `Your verification code is: ${code}. This code will expire in 10 minutes.`
+        });
+        console.log('Email sent successfully via EmailJS');
+        return;
+      } catch (error) {
+        console.error('EmailJS error:', error);
+      }
+    }
+    
+    // If both methods fail, log to console
+    console.warn('Email service not configured. Verification code:', code);
+    console.warn('To enable email sending:');
+    console.warn('1. Set up Firebase Cloud Functions (see EMAIL_SETUP.md), OR');
+    console.warn('2. Set up EmailJS at https://www.emailjs.com/ and add environment variables');
+    console.warn('   REACT_APP_EMAILJS_SERVICE_ID, REACT_APP_EMAILJS_TEMPLATE_ID, REACT_APP_EMAILJS_PUBLIC_KEY');
   };
 
   const handleLogin = async (e) => {
