@@ -29,7 +29,6 @@ function App() {
   const [newUserForm, setNewUserForm] = useState({ username: '', email: '', password: '', isAdmin: false });
   const [validationErrors, setValidationErrors] = useState({ username: '', email: '' });
   const [validating, setValidating] = useState({ username: false, email: false });
-  const [showLoginButton, setShowLoginButton] = useState(false);
   const [galleryImages, setGalleryImages] = useState(() => {
     const saved = localStorage.getItem('galleryImages');
     return saved ? JSON.parse(saved) : [
@@ -266,23 +265,6 @@ function App() {
     }
   }, [editableContent, profileName, profileImageUrl, galleryImages]);
 
-  // Check if URL contains 'login' to show/hide login button
-  useEffect(() => {
-    const checkUrl = () => {
-      const url = window.location.href.toLowerCase();
-      setShowLoginButton(url.includes('login'));
-    };
-    
-    checkUrl();
-    // Check URL on hash change (for SPA navigation)
-    window.addEventListener('hashchange', checkUrl);
-    window.addEventListener('popstate', checkUrl);
-    
-    return () => {
-      window.removeEventListener('hashchange', checkUrl);
-      window.removeEventListener('popstate', checkUrl);
-    };
-  }, []);
 
   // Load data from Firebase on component mount
   useEffect(() => {
@@ -1728,11 +1710,9 @@ function App() {
                   </button>
                 </div>
               ) : (
-                showLoginButton && (
-                  <button className="nav-login-btn" onClick={() => setShowLoginModal(true)}>
-                    <i className="fas fa-sign-in-alt"></i> Login
-                  </button>
-                )
+                <button className="nav-login-btn" onClick={() => setShowLoginModal(true)}>
+                  <i className="fas fa-sign-in-alt"></i> Login
+                </button>
               )}
             </li>
           </ul>
